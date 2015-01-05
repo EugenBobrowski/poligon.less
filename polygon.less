@@ -1,0 +1,59 @@
+.rotate(@degrees) {
+  -webkit-transform: rotate(@degrees);
+  -ms-transform: rotate(@degrees); // IE9 only
+  -o-transform: rotate(@degrees);
+  transform: rotate(@degrees);
+}
+
+// FIGURES
+
+.make-hexagon (@color, @d, @border-radius: 0, @margin: 0) {
+  @delta: 2 * @border-radius * cos(30deg);
+  @height-true: (@d / cos(30deg));
+  @height: @height-true + @delta;
+
+  width: @d;
+  height: @height / 2;
+  background-color: @color;
+  position: relative;
+  margin: (@height-true / 2 - @delta + (@margin / sin(60deg))) @margin;
+  border-radius: @border-radius;
+  z-index: 1;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    width: @d;
+    height: @height / 2;
+    top: 0;
+    left: 0;
+    background-color: @color;
+    border-radius: @border-radius;
+    z-index: -1;
+
+  }
+  &:before {
+    .rotate(60deg);
+
+  }
+  &:after {
+    .rotate(-60deg);
+  }
+}
+.make-bee-cell (@color, @d, @border-radius: 0, @margin: 0) {
+  .make-hexagon (@color, @d, @border-radius, @margin);
+  @delta: 2 * @border-radius * cos(30deg);
+  @height-true: (@d / cos(30deg));
+  @height: @height-true + @delta;
+  margin-top: (@height-true / 4 - @delta / 2 + (@margin / sin(60deg)));
+  margin-bottom: ((@margin / sin(60deg)) - @delta / 2);
+
+
+}
+.make-bee-cells-float (@container-width, @d, @margin) {
+  @per-line: (floor(unit(@container-width / (@d + @margin * 2))) - 1)*2;
+
+  &:nth-child(@{per-line}n+1) {
+    margin-left: @d/2 + @margin * 2;
+  }
+}
